@@ -1,0 +1,19 @@
+:root {
+    color-scheme: light dark;
+}
+body {
+    color: light-dark(#3c3f3f, #efefec);
+    background-color: light-dark(#efedea, #303030);
+}
+  
+input {
+    width: 75%;
+    color: light-dark(#303030, #ffffff);
+    background-color: light-dark(#efedea, #303030);
+    outline-color: light-dark(#303030, #ffffff);
+}
+
+.cntrd {
+    display: block;
+    align-content: center;
+}
