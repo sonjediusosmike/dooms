@@ -44,7 +44,7 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
-    <input type="input" list="listoftools">
+    <input type="input" list="listoftools" id="search">
     <datalist id="listoftools">
         <option value="captcha but its checking that you aren't a human"></option>
         <option value="dooms"></option>
@@ -54,17 +54,24 @@
     <h2>dooms</h2>
     <a href="h.html"><button class="btn">dooms</button></a>
     <a href="/achtpac/achtpac.html"><button class="btn">captcha but its checking that you aren't a human</button></a>
+    </br>
+    </br>
     <div id="faq">
-        <h1>faq</h1>
-        <h2>this its right now <time></time></h2>
-        <kbd>ctrl + c</kbd> to copy
+        <details>
+            <summary>what is the time</summary>
+            <h2 id="changeMe"></h2>
+        </details>
+        <script>
+            var d = new Date();
+            h = d.getHours()
+            h = h+":"
+            m = d.getMinutes()
+            m = m+"."
+            s = d.getSeconds()
+            s = s.toString()
+            p = h + m + s
+            document.getElementById("changeMe").innerHTML = p
+        </script>
     </div>
-    <script>
-        window.onload = function() {
-          turnstile.render('#turnstile-widget', {
-            sitekey: 'your-site-key'
-          });
-        };
-    </script>      
-</body>
+    </body>
 </html>
