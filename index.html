@@ -38,9 +38,17 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
+    <div id="turnstile-widget"></div>
     <h1>sina farimaneh is cool </br></h1>
     <h2>dooms</h2>
     <a href="h.html"><button class="btn">dooms</button></a>
     <a href="/achtpac/achtpac.html"><button class="btn">captcha but its checking that you aren't a human</button></a>
+    <script>
+        window.onload = function() {
+          turnstile.render('#turnstile-widget', {
+            sitekey: 'your-site-key'
+          });
+        };
+    </script>      
 </body>
 </html>
