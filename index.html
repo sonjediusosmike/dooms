@@ -34,15 +34,31 @@
             display: block;
             align-content: center;
         }
+
+        kbd {
+            border-radius: 2px;
+            padding: 2px;
+            border: 1px solid rgb(89, 89, 89);
+        }
     </style>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
+    <input type="input" list="listoftools">
+    <datalist id="listoftools">
+        <option value="captcha but its checking that you aren't a human"></option>
+        <option value="dooms"></option>
+    </datalist>
     <div id="turnstile-widget"></div>
     <h1>sina farimaneh is cool </br></h1>
     <h2>dooms</h2>
     <a href="h.html"><button class="btn">dooms</button></a>
     <a href="/achtpac/achtpac.html"><button class="btn">captcha but its checking that you aren't a human</button></a>
+    <div id="faq">
+        <h1>faq</h1>
+        <h2>this its right now <time></time></h2>
+        <kbd>ctrl + c</kbd> to copy
+    </div>
     <script>
         window.onload = function() {
           turnstile.render('#turnstile-widget', {
