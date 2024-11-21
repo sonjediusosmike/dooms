@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+        body {
+            color: light-dark(#3c3f3f, #efefec);
+            background-color: light-dark(#efedea, #303030);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        .btn {
+            cursor: pointer;
+            border: 1px solid #444a4e;
+            background-color: transparent;
+            height: auto;
+            width: auto;
+            font-size: 1.5em;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        div {
+            display: block;
+            align-content: center;
+        }
+
+        kbd {
+            border-radius: 2px;
+            padding: 2px;
+            border: 1px solid rgb(89, 89, 89);
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="theblues"></h1>
+    <script>
+        let tex = '{'; // Initialize tex as an empty JSON string
+
+        for (let index = 0; index < 11; index++) {
+            let a = Math.floor(Math.random() * 10); // Generate a random number between 0 and 9
+            let text = `"${index}":${a}`; // Create a valid JSON key-value pair
+            tex += (index < 10) ? `${text},` : `${text}`; // Add the pair to tex
+        }
+
+        tex += '}'; // Close the JSON string
+
+        const obj = JSON.parse(tex); // Parse the JSON string into an object
+        document.getElementById("theblues").innerText = JSON.stringify(obj, null, 2)
+
+    </script>
+</body>
+</html>
