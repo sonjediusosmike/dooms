@@ -51,16 +51,34 @@
 </head>
 <body>
     <h1 id="i" class="cls"></h1>
-    <script async src="https://cse.google.com/cse.js?cx=02fefd177412b4452">
-    </script>
+    <script async src="https://cse.google.com/cse.js?cx=02fefd177412b4452"></script>
     <div class="gcse-search"></div>
     <h2>a experience for all</h2>
     <script>
+        function admin(pass, password) {
+            if (pass == password) {
+                console.log('your admin');
+            }
+
+            else {
+                console.log("error id10t")
+            }
+        }
         let i = document.getElementById("i")
+        let jsys
         i.innerText = "idlgtm"
         if (i.className == "cls") {
             i.innerText = "i dont like google that much"
         }
+
+        setInterval(() => {
+            if (jsys == "{19, 25, 19, 20, 5, 13, 10}") {
+                console.log("root")
+                let password = prompt("password:")
+                let pass = "root"
+                admin(pass, password)
+            }
+        }, 1); // Check every second
     </script>
 </body>
 </html>
