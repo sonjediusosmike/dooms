@@ -8,11 +8,18 @@
             color-scheme: light dark;
         }
         body {
-            color: light-dark(#3c3f3f, #efefec);
-            background-color: light-dark(#efedea, #303030);
+            color: #3c3f3f;
+            background-color: #efedea;
             margin: 0;
             padding: 0;
             text-align: center;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: #efefec;
+                background-color: #303030;
+            }
         }
 
         h1 {
@@ -40,14 +47,16 @@
             border: 1px solid rgb(89, 89, 89);
         }
     </style>
-    <title>Document</title>
+    <title>JSON File Creator</title>
 </head>
 <body>
-    <h1 id="theblues"></h1>
-    <a href="" id="a">click here to download your file</a>
-    <button onclick="download('json.json', 'application/json')">Create file</button>
+    <h1 id="theblues">JSON File Generator</h1>
+    <a href="#" id="a">Click here to download your file</a>
+    <br><br>
+    <button class="btn" onclick="download('json.json', 'application/json')">Create File</button>
+
     <script>
-        let tex = '{'; // Initialize tex as an empty JSON string
+        let tex = '{'; // Start JSON string
 
         for (let index = 0; index < 11; index++) {
             let a = Math.floor(Math.random() * 10); // Generate a random number between 0 and 9
@@ -57,16 +66,20 @@
 
         tex += '}'; // Close the JSON string
 
-        const obj = JSON.parse(tex); // Parse the JSON string into an object
+        let obj;
+        try {
+            obj = JSON.parse(tex); // Parse the JSON string into an object
+        } catch (error) {
+            console.error("Failed to parse JSON:", error);
+        }
 
         function download(name, type) {
-            var a = document.getElementById("a");
-            var text = obj
-            var file = new Blob([text], {type: type});
+            const a = document.getElementById("a");
+            const text = JSON.stringify(obj, null, 2); // Convert JSON object to a pretty string
+            const file = new Blob([text], { type: type });
             a.href = URL.createObjectURL(file);
             a.download = name;
         }
-
     </script>
 </body>
 </html>
