@@ -44,6 +44,8 @@
 </head>
 <body>
     <h1 id="theblues"></h1>
+    <a href="" id="a">click here to download your file</a>
+    <button onclick="download('json.json', 'application/json')">Create file</button>
     <script>
         let tex = '{'; // Initialize tex as an empty JSON string
 
@@ -56,7 +58,14 @@
         tex += '}'; // Close the JSON string
 
         const obj = JSON.parse(tex); // Parse the JSON string into an object
-        document.getElementById("theblues").innerText = JSON.stringify(obj, null, 2)
+
+        function download(name, type) {
+            var a = document.getElementById("a");
+            var text = obj
+            var file = new Blob([text], {type: type});
+            a.href = URL.createObjectURL(file);
+            a.download = name;
+        }
 
     </script>
 </body>
