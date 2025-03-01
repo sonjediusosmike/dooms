@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Enhancer with Download</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Enhancer</h1>
+    <input type="file" id="audioInput" accept="audio/*">
+    <div class="controls">
+        <button id="playButton" disabled>Play</button>
+        <button id="stopButton" disabled>Stop</button>
+        <label>
+            Bass Boost: 
+            <input type="range" id="bassBoost" min="0" max="20" value="0">
+        </label>
+        <label>
+            Treble Boost: 
+            <input type="range" id="trebleBoost" min="0" max="20" value="0">
+        </label>
+        <button id="downloadButton" disabled>Download Enhanced Audio</button>
+    </div>
+    <audio id="audioPlayer" controls style="margin-top: 10px; width: 100%;"></audio>
+    <script>
+        let audioContext;
+        let audioSource;
+        let bassFilter;
+        let trebleFilter;
+        let compressor;
+        let gainNode;
+        let recorder;
+        let recordedChunks = [];
+        let mediaStreamDestination;
+
+        const audioInput = document.getElementById('audioInput');
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
+        const bassBoost = document.getElementById('bassBoost');
+        const trebleBoost = document.getElementById('trebleBoost');
+        const downloadButton = document.getElementById('downloadButton');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        audioInput.addEventListener('change', function () {
+            const file = audioInput.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                audioPlayer.src = url;
+                playButton.disabled = false;
+            }
+        });
+
+        playButton.addEventListener('click', async () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioSource = audioContext.createMediaElementSource(audioPlayer);
+
+                // Create bass and treble filters
+                bassFilter = audioContext.createBiquadFilter();
+                bassFilter.type = 'lowshelf';
+                bassFilter.frequency.value = 200;
+
+                trebleFilter = audioContext.createBiquadFilter();
+                trebleFilter.type = 'highshelf';
+                trebleFilter.frequency.value = 3000;
+
+                // Add a compressor for better audio quality
+                compressor = audioContext.createDynamicsCompressor();
+                compressor.threshold.value = -20; 
+                compressor.knee.value = 30;
+                compressor.ratio.value = 12;
+                compressor.attack.value = 0.003;
+                compressor.release.value = 0.25;
+
+                gainNode = audioContext.createGain();
+                gainNode.gain.value = 1.2; // Slight volume boost
+
+                // Recorder setup
+                mediaStreamDestination = audioContext.createMediaStreamDestination();
+                audioSource.connect(bassFilter);
+                bassFilter.connect(trebleFilter);
+                trebleFilter.connect(compressor);
+                compressor.connect(gainNode);
+                gainNode.connect(mediaStreamDestination);
+                gainNode.connect(audioContext.destination);
+
+                recorder = new MediaRecorder(mediaStreamDestination.stream);
+                recorder.ondataavailable = (event) => {
+                    recordedChunks.push(event.data);
+                };
+                recorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'audio/wav' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'enhanced_audio.wav';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    recordedChunks = [];
+                };
+            }
+
+            recorder.start();
+            audioPlayer.play();
+            stopButton.disabled = false;
+            playButton.disabled = true;
+            downloadButton.disabled = true;
+        });
+
+        stopButton.addEventListener('click', () => {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            recorder.stop();
+            playButton.disabled = false;
+            stopButton.disabled = true;
+            downloadButton.disabled = false;
+        });
+
+        bassBoost.addEventListener('input', () => {
+            if (bassFilter) {
+                bassFilter.gain.value = bassBoost.value;
+            }
+        });
+
+        trebleBoost.addEventListener('input', () => {
+            if (trebleFilter) {
+                trebleFilter.gain.value = trebleBoost.value;
+            }
+        });
+
+        downloadButton.addEventListener('click', () => {
+            if (recordedChunks.length === 0) {
+                alert('Please play and stop the audio first to generate a downloadable file.');
+            }
+        });
+    </script>
+</body>
+</html>
